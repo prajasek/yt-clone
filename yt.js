@@ -46,7 +46,6 @@ document.addEventListener('keydown', e => {
 
 
 //Timeline
-
 timelineContainer.addEventListener('mousemove', handleTimelineUpdate )
 
 function handleTimelineUpdate(e) {
