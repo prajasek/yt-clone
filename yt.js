@@ -49,9 +49,18 @@ document.addEventListener('keydown', e => {
 timelineContainer.addEventListener('mousemove', handleTimelineUpdate )
 
 function handleTimelineUpdate(e) {
+    const videoDuration = video.duration;
     const rect = timelineContainer.getBoundingClientRect(); 
     const percent = Math.min(Math.max(0, e.x-rect.x), rect.width) / rect.width;
-    const previewImgNumber = Math.max(1, Math.floor)
+    const previewImgNumber = Math.max(1, Math.floor(percent * videoDuration))
+    previewImg.src = `assets/previewImgs/previewImg${previewImgNumber}.jpg`
+    timelineContainer.style.setProperty("--preview-position", percent);
+    
+    if (isScrubbing) {
+        e.preventDefault();
+        thumbnailImg.src = `assets/previewImgs/previewImg${previewImgNumber}.jpg`;
+        timelineContainer.style.setProperty('--progress-position', percent)
+    }
  }
  
 
@@ -103,6 +112,8 @@ video.addEventListener('loadeddata', () => {
 const x = new Intl.NumberFormat(undefined, {minimumIntegerDigits:2})
 video.addEventListener('timeupdate', () => {
     currentTimeElem.textContent = x.format(Math.floor(video.currentTime));
+    const percent = video.currentTime / video.duration; 
+    timelineContainer.style.setProperty('--progress-position', percent)
 
 })
 video.addEventListener('seeking', () => console.log('seek',video.currentTime))
