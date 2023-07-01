@@ -227,10 +227,11 @@ video {
     transform: translate(-50%, -100%);
     left: calc(var(--preview-position) *100%);
     border-radius: 0.25rem;
-    border: 1px solid rgb(233, 4, 4); display:none;
+    border: 1px solid rgb(233, 4, 4); 
+    display:none;
 }
 
-.thumb-img {
+.thumbnail-img {
     position:absolute; 
     top:0; left:0; bottom:0; right:0; 
     width:100%;
@@ -238,7 +239,7 @@ video {
     display:none;
 }
 
-.video-container.scrubbing .thumb-img {
+.video-container.scrubbing .thumbnail-img {
     display:block;
 }
 

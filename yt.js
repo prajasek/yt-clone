@@ -44,11 +44,43 @@ document.addEventListener('keydown', e => {
     }
 })
 
+let isScrubbing = false; 
+
+timelineContainer.addEventListener('mousemove', handleTimelineUpdate )
+timelineContainer.addEventListener('mousedown', toggleScrubbing)
+document.addEventListener('mouseup', e => {
+    if (isScrubbing) toggleScrubbing(e)
+})
+document.addEventListener('mousemove', e => {
+    if (isScrubbing) handleTimelineUpdate(e)
+    console.log("DOC MM")
+
+} )
+
+
+
+function toggleScrubbing(e) {
+    const rect = timelineContainer.getBoundingClientRect(); 
+    const percent = Math.min(Math.max(0, e.x-rect.x), rect.width) / rect.width;
+    isScrubbing = (e.buttons & 1) === 1 
+    vidContainer.classList.toggle("scrubbing", isScrubbing)
+    console.log("Scrubbing:", isScrubbing)
+
+    if(isScrubbing) {
+        wasPaused = video.paused
+        video.pause();
+    } else {
+        video.currentTime = percent * video.duration
+        if (!wasPaused) video.play()
+    }
+    handleTimelineUpdate(e);
+}
 
 //Timeline
-timelineContainer.addEventListener('mousemove', handleTimelineUpdate )
+
 
 function handleTimelineUpdate(e) {
+    console.log("HTU")
     const videoDuration = video.duration;
     const rect = timelineContainer.getBoundingClientRect(); 
     const percent = Math.min(Math.max(0, e.x-rect.x), rect.width) / rect.width;
@@ -59,6 +91,7 @@ function handleTimelineUpdate(e) {
     if (isScrubbing) {
         e.preventDefault();
         thumbnailImg.src = `assets/previewImgs/previewImg${previewImgNumber}.jpg`;
+        // console.log(thumbnailImg.src)
         timelineContainer.style.setProperty('--progress-position', percent)
     }
  }
